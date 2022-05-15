@@ -9,7 +9,7 @@ using namespace std;
 string name ,line ,word,newtext;
 vector <string> words,content;
 vector<string> text;
-int counter, choice;
+int choice;
 fstream file ,nwfile;
 char linec[300],pp;
 
@@ -18,11 +18,13 @@ bool menu();
 void read_content();
 void save();
 
+//kariem gamal functios
 void mergeFile();
-void countLines();
+void count_lines();
 void countCharacters();
 void countWords();
 void searchWord();
+
 
 void AddText();
 void DisplayContent();
@@ -84,7 +86,7 @@ bool menu(){
     else if (choice == 8)
         countCharacters();
     else if (choice == 9)
-        countLines();
+        count_lines();
     else if (choice == 10)
        searchWord();
     else if (choice == 11)
@@ -106,6 +108,7 @@ bool menu(){
 }
 
 void read_content(){
+    //to read the content of the file and put it in a vector
     file.open(name,ios::in);
     while(getline(file,line)){
         content.push_back(line);
@@ -123,6 +126,7 @@ void mergeFile(){
     cin.sync();
     getline(cin,mergedfile);
     mergedfile+=".txt";
+    //open the file to merge it with the original
     nwfile.open(mergedfile,ios::in);
     if(nwfile.fail()){
         cout<<"\ninvalid file name"<<endl;
@@ -138,40 +142,48 @@ void mergeFile(){
     }
 }
 
-void countLines(){
-    int countee=0;
-    file.open(name,ios::in);
-    while (getline(cin,line)){
-        countee +=1;
-    }
-    file.close();
-    cout<<countee;
-}
-
-
-void countCharacters(){
+void count_lines(){
+    int counter=0;
     file.open(name,ios::in);
     while (getline(file,line)){
-        for (char i: line)++counter;
+
+        ++counter;
+
     }
     file.close();
-    cout<<counter;
+    cout<<"number of lines is: "<<counter;
+}
+
+void countCharacters(){
+    int counter=0;
+    file.open(name,ios::in);
+    while (getline(file,line)){
+        for (char i: line){
+            ++counter;
+
+        }
+    }
+    file.close();
+    cout<<"number of characters in the original file is: "<<counter;
 }
 void countWords(){
+    int counter=0;
     file.open(name,ios::in);
     while (getline(file,line)){
         counter +=1;
         for(int i=0; i<line.length();++i){
+                //to recognize a word if a space is found between letters
             if (i !=0 && int(line[i]) == 32 && int(line[i-1] !=32)) {
                 counter +=1;
             }}}
     file.close();
-    cout<<counter;
+    cout<<"number of words in the original file is: "<<counter;
 }
 
 void searchWord(){
     string state="";
     file.open(name,ios::in);
+    //put the words in a vector called words
     while (getline(file , line)){
         transform(line.begin(),line.end(),line.begin(),::tolower);
         for(int i=0; i<line.length();++i){
@@ -190,6 +202,7 @@ void searchWord(){
     getline(cin,word);
     transform(word.begin(),word.end(),word.begin(), ::tolower);
     for(auto i:words){
+            //compare the word with the words in the vector
         if(i==word)
             state="found";
     }
