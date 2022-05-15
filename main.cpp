@@ -7,13 +7,16 @@ using namespace std;
 
 
 string name ,line ,word,newtext;
-vector <string> words;
+vector <string> words,content;
 vector<string> text;
 int counter, choice;
 fstream file ,nwfile;
-char linec[300];
+char linec[300],pp;
 
-int menu();
+bool menu();
+
+void read_content();
+void save();
 
 void mergeFile();
 void countLines();
@@ -24,11 +27,14 @@ void searchWord();
 void AddText();
 void DisplayContent();
 void Empty();
-void Encrypt();
+void Encrypt(vector<string>&content);
 void Decrypt();
 
-void lowerCase(vector<string>&text);
-void upperCase(vector<string>&text);
+void lowercase(vector<string>&content);
+void uppercase(vector<string>&content);
+void countWord();
+void repetedwords();
+void firstchar (vector<string>&content);
 
 int main() {
     cout<<"enter the name of the file: ";
@@ -43,13 +49,16 @@ int main() {
         cout<<"\nthis file exists."<<endl;
         file.close();
     }
-    menu();
-    
-    return 0;
+    read_content();
+    while(menu()){
+        menu();
+    }
+
+
 }
 
-int menu(){
-    
+bool menu(){
+    cout<<"\n-------------------------------------------------------------"<<endl;
     cout << "\n1=> Add Text\n2=> Display the content\n3=> Empty the content\n4=> Encrypt the content\n";
     cout << "5=> Decrypt the content\n6=> merge another file\n7=> Count the number of words\n";
     cout << "8=> Count the number of characters\n9=> Count the number of lines\n10=> Search for a word\n";
@@ -57,7 +66,7 @@ int menu(){
     cout << "13=> Turn the file content to lower case\n14=> turn first char of each word to capital\n15=> save\n16=> Exit";
     cout << "\nplease choose one of these options: ";
     cin >> choice;
-    
+
     if (choice == 1)
         AddText();
     else if (choice == 2)
@@ -65,7 +74,7 @@ int menu(){
     else if (choice == 3)
         Empty();
     else if (choice == 4)
-        Encrypt();
+        Encrypt(content);
     else if (choice == 5)
         Decrypt();
     else if (choice == 6)
@@ -78,44 +87,67 @@ int menu(){
         countLines();
     else if (choice == 10)
        searchWord();
-    //else if (choice == 11)
-        //countNOTW(text);
+    else if (choice == 11)
+        repetedwords();
     else if (choice == 12)
-        upperCase(text);
+        uppercase(content);
     else if (choice == 13)
-        lowerCase(text);
-    //else if (choice == 14)
-        //lowerCased(text);
-    //else if (choice == 15)
+        lowercase(content);
+    else if (choice == 14)
+        firstchar(content);
+    else if (choice == 15){
+        save();
+    }
+    else if (choice ==16){
+        return false;
+    }
 
-    return choice;
+    return true;
 }
 
+void read_content(){
+    file.open(name,ios::in);
+    while(getline(file,line)){
+        content.push_back(line);
+    }
+    for(string i:content){
+        cout<<i<<endl;
+    }
+    file.close();
+};
+
 void mergeFile(){
+    string mergedfile;
     cout<<"enter the name of the another file: ";
-    name="";
-    cin>>name;
-    name+=".txt";
-    nwfile.open(name,ios::in);
+    cin.clear();
+    cin.sync();
+    getline(cin,mergedfile);
+    mergedfile+=".txt";
+    nwfile.open(mergedfile,ios::in);
     if(nwfile.fail()){
         cout<<"\ninvalid file name"<<endl;
     }else{
         while (getline(nwfile,line)){
-            file<<" ";
-            file<<line;
+
+            content.push_back(line);
         }
-        file.close();
         nwfile.close();
-    }}
+    }
+    for(string i:content){
+        cout<<i<<endl;
+    }
+}
 
 void countLines(){
+    int countee=0;
     file.open(name,ios::in);
-    while (!file.eof()){
-        counter +=1;
+    while (getline(cin,line)){
+        countee +=1;
     }
     file.close();
-    cout<<counter;
+    cout<<countee;
 }
+
 
 void countCharacters(){
     file.open(name,ios::in);
@@ -171,29 +203,154 @@ void DisplayContent(){
     file.open(name,ios::in);
     while (!file.eof()){
         file.getline(linec, 300, '\n');
-        text.push_back(string(linec));
-    }
-    for (string linec: text){
-        cout << linec << endl;
+        cout<<linec<<endl;
     }
     file.close();
 }
 
 void Empty(){
-    file.open(name,ios::out);
-    file << "";
+    content.clear();
+    for(string i:content){
+        cout<<i<<endl;
+    }
+
+    //file.open(name,ios::out);
+    //file << "";
+    //file.close();
+}
+
+void AddText(){
+    cout << "\nplease enter a text: ";
+    cin.clear();
+    cin.sync();
+    getline(cin,newtext);
+    content[content.size()-1] +=" ";
+    content[content.size()-1] +=newtext;
+    for(string i:content){
+        cout<<i<<endl ;
+    }
+}
+
+void Encrypt(vector<string>&content){
+    string text;
+    for(int i=0; i<content.size();++i){
+        text="";
+        for (int j=0 ; j <content[i].size();  j++){
+           content[i][j]=char( (int)content[i][j] + 1);
+        }
+    }
+    for(string i:content){
+        cout<<i<<endl;
+    }
+}
+
+void Decrypt(){
+string text;
+    for(int i=0; i<content.size();++i){
+        text="";
+        for (int j=0 ; j <content[i].size();  j++){
+           content[i][j]=char( (int)content[i][j] - 1);
+        }
+    }
+    for(string i:content){
+        cout<<i<<endl;
+    }
+}
+
+void uppercase(vector<string>&content){
+    for(int i =0 ; i<content.size();++i){
+        for(int j= 0 ;j<content[i].size();++j){
+            content[i][j]=toupper(content[i][j]);
+        }
+    }
+    for(string i:content){
+        cout<<i<<endl;
+    }
+}
+
+
+void lowercase(vector<string>&content){
+    for(int i =0 ; i<content.size();++i){
+        for(int j= 0 ;j<content[i].size();++j){
+            content[i][j]=tolower(content[i][j]);
+        }
+    }
+    for(string i:content){
+        cout<<i<<endl;
+    }
+}
+
+void repetedwords(){
+    string userword;
+    int word_counter=0;
+    for(string line:content){
+        transform(line.begin(),line.end(),line.begin(),::tolower);
+        for(int i=0; i<line.length();++i){
+            if ( int(line[i]) != 32){
+                word +=line[i];
+            }else if (i!=0 && int(line[i]) == 32 && int(line[i-1] !=32)){
+                words.push_back(word);
+                word="";
+            }
+        }
+        words.push_back(word);
+        word="";
+    }
+    cout<<"enter the word to count the repeations: ";
+    cin.clear();
+    cin.sync();
+    getline(cin,userword);
+    for(string i:words){
+        if(i==userword){
+            word_counter+=1;
+        }
+    }
+    cout<<"the word repeted "<<word_counter<<" times";
     file.close();
 }
 
-void AddText(){}
+void save(){
+    char choice;
+    string new_file;
+    cout<<"do you want to save it in same file or another file ( (s)ame or (a)nother ): ";
+    cin>>choice;
+    choice=tolower(choice);
+    if (choice=='s'){
+        file.open(name,ios::out);
+        for(string i:content){
+        file<<i<<endl;
+        }
+        file.close();
+    }else if(choice=='a'){
+        cout<<"enter the name of the file: ";
+        cin.clear();
+        cin.sync();
+        getline(cin,new_file);
+        new_file+=".txt";
+        file.open(new_file,ios::app);
+        for(string i:content){
+        file<<i<<endl;
+        }
+        file.close();
+    }
+}
 
-void Encrypt(){}
-
-void Decrypt(){}
-
-void lowerCase(vector<string>&text){}
-
-
-void upperCase(vector<string>&text){}
-
-
+void firstchar (vector<string>&content){
+    string word ;
+    char answer;
+    int x=0;
+    for(int i = 0 ;i<content.size() ; i++){
+            x=0;
+        for(int j = 0 ; j <content[i].size();j++){
+                if(x==0){
+                    content[i][j]=toupper(content[i][j]);
+                    ++x;
+                }if (content[i][j]==' '){
+                    x=0;
+                }
+        }
+        for(string i:content){
+        cout<<i<<endl;
+        }
+    }
+}
