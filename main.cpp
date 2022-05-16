@@ -31,7 +31,7 @@ void DisplayContent();
 void Empty();
 void Encrypt(vector<string>&content);
 void Decrypt();
-
+//Aya MOhamed functios
 void lowercase(vector<string>&content);
 void uppercase(vector<string>&content);
 void countWord();
@@ -273,6 +273,7 @@ string text;
 void uppercase(vector<string>&content){
     for(int i =0 ; i<content.size();++i){
         for(int j= 0 ;j<content[i].size();++j){
+            //for each char in each line we will use to upper function to make it upper case
             content[i][j]=toupper(content[i][j]);
         }
     }
@@ -285,6 +286,7 @@ void uppercase(vector<string>&content){
 void lowercase(vector<string>&content){
     for(int i =0 ; i<content.size();++i){
         for(int j= 0 ;j<content[i].size();++j){
+            //for each char in each line we will use to lower function to make it lower case
             content[i][j]=tolower(content[i][j]);
         }
     }
@@ -297,8 +299,10 @@ void repetedwords(){
     string userword;
     int word_counter=0;
     for(string line:content){
+        // to make all content lower to get all probabilities
         transform(line.begin(),line.end(),line.begin(),::tolower);
         for(int i=0; i<line.length();++i){
+            // check if it is space or not
             if ( int(line[i]) != 32){
                 word +=line[i];
             }else if (i!=0 && int(line[i]) == 32 && int(line[i-1] !=32)){
