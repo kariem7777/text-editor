@@ -25,12 +25,13 @@ void countCharacters();
 void countWords();
 void searchWord();
 
-
+//karin khair functions
 void AddText();
 void DisplayContent();
 void Empty();
 void Encrypt(vector<string>&content);
 void Decrypt();
+
 //Aya MOhamed functios
 void lowercase(vector<string>&content);
 void uppercase(vector<string>&content);
@@ -226,10 +227,6 @@ void Empty(){
     for(string i:content){
         cout<<i<<endl;
     }
-
-    //file.open(name,ios::out);
-    //file << "";
-    //file.close();
 }
 
 void AddText(){
@@ -237,7 +234,9 @@ void AddText(){
     cin.clear();
     cin.sync();
     getline(cin,newtext);
+    //to put a space between words
     content[content.size()-1] +=" ";
+    //to put a new text
     content[content.size()-1] +=newtext;
     for(string i:content){
         cout<<i<<endl ;
@@ -249,7 +248,8 @@ void Encrypt(vector<string>&content){
     for(int i=0; i<content.size();++i){
         text="";
         for (int j=0 ; j <content[i].size();  j++){
-           content[i][j]=char( (int)content[i][j] + 1);
+            //to increase the number of each letter in the ASCII Code by one
+            content[i][j]=char( (int)content[i][j] + 1);
         }
     }
     for(string i:content){
@@ -262,7 +262,8 @@ string text;
     for(int i=0; i<content.size();++i){
         text="";
         for (int j=0 ; j <content[i].size();  j++){
-           content[i][j]=char( (int)content[i][j] - 1);
+            //to reduce the number of each letter in the ASCII Code by one
+            content[i][j]=char( (int)content[i][j] - 1);
         }
     }
     for(string i:content){
